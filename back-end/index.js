@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express.Router();
 const Article = require('./articleModel');
+const User = require('./userModel');
 
 app.get('/', (req, res) => {
     res.send("Hello world");
@@ -72,20 +73,6 @@ app.delete('/article/delete/:id', (req, res) => {
         })
 })
 
-/*
-    title: {type: String, required: true},
-    content: {type: String, required: true},
-    author: String,
-    date: {type: Date, default: Date.now()},
-    comments: [{author:String, content: String}]
- */
-
-const article1 = new Article({
-    title: "Article2",
-    content: "Here is my second article",
-    author: "Maxime LOMBARDO"
-});
-
 function createArticleInBase(article){
     article.save()
         .then(doc => {
@@ -96,5 +83,39 @@ function createArticleInBase(article){
         })
 }
 
+async function checkIfUserInBase(user){
+    try {
+        const userFound = await User.findOne({username: user.username});
+        return !!userFound;
+    } catch(err) {
+        console.error(err);
+        return false;
+    }
+}
+
+async function createUserInBase(user){
+    const userExists = await checkIfUserInBase(user);
+    if(userExists){
+        console.log("Username already used");
+    }
+    else{
+        user.save()
+            .then(doc => {
+                console.log("User registered with success", doc);
+            })
+            .catch(err => {
+                console.error("Error while trying to save the user in the DB", err);
+            })
+    }
+
+}
+
+let user1 = new User({
+    username: "maxime",
+    password: "azerty",
+    email: "maxime@maxime.com"
+})
+
+createUserInBase(user1);
 
 module.exports=app
