@@ -1,0 +1,16 @@
+nav {
+    background-color: white;
+    color: white;
+    padding: 1rem;
+    /* Autres styles ici */
+}
+
+a, a:link, a:visited, a:hover, a:active {
+    color: black; /* ou la couleur que vous préférez */
+    text-decoration: none; /* optionnel, pour supprimer le soulignement */
+}
+
+
+.Links {
+
+}
